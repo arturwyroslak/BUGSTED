@@ -1,0 +1,53 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: bugsted-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-bugsted}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-bugsted123}
+      POSTGRES_DB: ${POSTGRES_DB:-bugsted}
+    volumes:
+      - bugsted_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-bugsted} -d ${POSTGRES_DB:-bugsted}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  minio:
+    image: minio/minio:latest
+    container_name: bugsted-minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${S3_ACCESS_KEY:-bugstedadmin}
+      MINIO_ROOT_PASSWORD: ${S3_SECRET_KEY:-BugstedMinio123!}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - bugsted_minio_data:/data
+
+  bugsted:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bugsted-app
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_started
+    ports:
+      - "${PORT:-3000}:${PORT:-3000}"
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      PORT: ${PORT:-3000}
+
+volumes:
+  bugsted_pg_data:
+  bugsted_minio_data:

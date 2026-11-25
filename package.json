@@ -1,0 +1,39 @@
+{
+  "name": "bugsted",
+  "version": "1.0.0",
+  "description": "BUGSTED - Self-hosted bug tracking system with S3/MinIO media uploads, two-way GitHub Issues sync, multi-language UI, and agentic AI fix suggestions",
+  "homepage": "https://github.com/arturwyroslak/BUGSTED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arturwyroslak/BUGSTED.git"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "node server/index.js",
+    "build": "vite build",
+    "start": "cross-env NODE_ENV=production node server/index.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.468.0",
+    "minio": "^8.0.6",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.10.0",
+    "pg": "^8.20.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "cross-env": "^7.0.3",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "vite": "^6.0.7"
+  }
+}
